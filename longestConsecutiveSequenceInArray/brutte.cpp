@@ -46,8 +46,6 @@ int linearSearch(vector<int>input, int num){
 int helper(vector<int>ip){
     int maxi=1;
     int count=1;
-
-    /* Use size_t to get rid of warning when doing i<ip.size()*/
     for(size_t i = 0;i<ip.size();i++){
         int x =ip[i];
         while(linearSearch(ip, x+1)){

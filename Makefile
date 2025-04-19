@@ -1,21 +1,25 @@
 # Compiler and flags
 CXX = g++
-CXXFLAGS = -Wall -Wextra -std=c++17 -O2
+CXXFLAGS = -Wall -Wextra -std=c++20 -O2
 
-# Find all .cpp files in current directory and subdirectories (excluding test.cpp)
-SRC = $(filter-out test.cpp, $(wildcard $(shell find . -name '*.cpp')))
+# Object output base directory
+OBJ_DIR = obj
 
-# Executables = source files without .cpp extension, preserve directory structure
-EXE = $(SRC:.cpp=)
+# Find all .cpp files (excluding test.cpp)
+SRC = $(filter-out %/test.cpp, $(shell find . -name '*.cpp'))
 
-# Default rule
+# Remove .cpp, prefix with obj/ for output binary path
+EXE = $(patsubst ./%.cpp, $(OBJ_DIR)/%, $(SRC))
+
+# Default target
 all: $(EXE)
 
-# Compile rule
-%: %.cpp
+# Rule to build each .cpp file into obj/... binary
+$(OBJ_DIR)/%: %.cpp
+	@mkdir -p $(dir $@)
 	$(CXX) $(CXXFLAGS) -o $@ $<
 
-# Clean rule
+# Clean target
 clean:
-	rm -f $(EXE)
+	rm -rf $(OBJ_DIR)
 
